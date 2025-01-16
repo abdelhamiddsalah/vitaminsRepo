@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:vitamins/core/styles/text_styles.dart';
 
 class CustomTextfield extends StatelessWidget {
-  const CustomTextfield({super.key, required this.text, this.validator, this.obscureText=false});
+  const CustomTextfield({super.key, required this.text, this.validator, this.obscureText=false, this.controller});
   final String text;
   final String? Function(String?)? validator;
   final bool obscureText ;
+ final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       validator: validator,
       obscureText: obscureText,
       decoration: InputDecoration(

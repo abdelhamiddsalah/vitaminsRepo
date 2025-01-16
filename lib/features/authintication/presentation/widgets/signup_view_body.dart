@@ -17,6 +17,7 @@ class SignupViewBody extends StatefulWidget {
 class _SignupViewBodyState extends State<SignupViewBody> {
   String selectedUserType = 'User'; // القيمة الافتراضية
 
+  // دالة لتحديث نوع المستخدم عند التغيير
   void updateUserType(String userType) {
     setState(() {
       selectedUserType = userType;
@@ -26,27 +27,40 @@ class _SignupViewBodyState extends State<SignupViewBody> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 56.0),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SvgPicture.asset(Assets.imagesImageinauth),
-            const SizedBox(height: 25.0),
-            CustomTextfield(text: 'Name'),
-            const SizedBox(height: 16.0),
-            CustomTextfield(text: 'Email',validator: Validation.validateEmail,),
-            const SizedBox(height: 16.0),
-            CustomTextfield(text: 'Password',obscureText: true,validator: Validation.validatePassword,),
-            const SizedBox(height: 20.0),
-            UserTypeDropdown(onUserTypeChanged: updateUserType), // استخدام الويدجت
-            const SizedBox(height: 22.0),
-            CustomButton(text: "Sign Up"),
-            const SizedBox(height: 16.0),
-            RowInLastauth(text1: "Already have an account?", text2: "Sign In",onPressed: (){
-              Navigator.pushNamed(context, '/login');
-            },),
-          ],
+        child: Form(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SvgPicture.asset(Assets.imagesImageinauth),
+              const SizedBox(height: 25.0),
+              CustomTextfield(text: 'Name'),
+              const SizedBox(height: 16.0),
+              CustomTextfield(text: 'Email', validator: Validation.validateEmail),
+              const SizedBox(height: 16.0),
+              CustomTextfield(
+                text: 'Password',
+                obscureText: true,
+                validator: Validation.validatePassword,
+              ),
+              const SizedBox(height: 20.0),
+              // إضافة ويدجت UserTypeDropdown
+              UserTypeDropdown(
+                onUserTypeChanged: updateUserType, // تم تمرير الدالة لتحديث النوع
+              ),
+              const SizedBox(height: 22.0),
+              CustomButton(text: "Sign Up"),
+              const SizedBox(height: 16.0),
+              RowInLastauth(
+                text1: "Already have an account?",
+                text2: "Sign In",
+                onPressed: () {
+                  Navigator.pushNamed(context, '/login');
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

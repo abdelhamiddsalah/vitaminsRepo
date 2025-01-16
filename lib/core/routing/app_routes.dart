@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vitamins/core/routing/routes.dart';
 import 'package:vitamins/features/authintication/presentation/forget_password_view.dart';
 import 'package:vitamins/features/authintication/presentation/login_view.dart';
+import 'package:vitamins/features/authintication/presentation/reset_password_view.dart';
 import 'package:vitamins/features/authintication/presentation/signup_view.dart';
 
 class AppRoutes {
@@ -13,6 +14,8 @@ Route? generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const LoginView());
     case Routes.forgetpassword:
       return MaterialPageRoute(builder: (context) => const ForgetPasswordView());
+    case Routes.resetpassword:
+      return MaterialPageRoute(builder: (context) => const ResetPasswordView());  
 
     default:
       return null;
