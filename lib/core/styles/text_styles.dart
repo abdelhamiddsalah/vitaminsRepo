@@ -11,5 +11,4 @@ class TextStyles {
     fontSize: 17,
     fontFamily: 'Overpass',
   );
-
 }
