@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:vitamins/constants/images.dart';
+import 'package:vitamins/core/validations/validation.dart';
 import 'package:vitamins/core/widgets/custom_button.dart';
 import 'package:vitamins/core/widgets/custom_textfield.dart';
+import 'package:vitamins/features/authintication/presentation/widgets/row_in_lastauth.dart';
 import 'user_type_dropdown.dart'; // استيراد الويدجت الجديدة
 
 class SignupViewBody extends StatefulWidget {
@@ -33,13 +35,17 @@ class _SignupViewBodyState extends State<SignupViewBody> {
             const SizedBox(height: 25.0),
             CustomTextfield(text: 'Name'),
             const SizedBox(height: 16.0),
-            CustomTextfield(text: 'Email'),
+            CustomTextfield(text: 'Email',validator: Validation.validateEmail,),
             const SizedBox(height: 16.0),
-            CustomTextfield(text: 'Password'),
+            CustomTextfield(text: 'Password',obscureText: true,validator: Validation.validatePassword,),
             const SizedBox(height: 20.0),
             UserTypeDropdown(onUserTypeChanged: updateUserType), // استخدام الويدجت
             const SizedBox(height: 22.0),
             CustomButton(text: "Sign Up"),
+            const SizedBox(height: 16.0),
+            RowInLastauth(text1: "Already have an account?", text2: "Sign In",onPressed: (){
+              Navigator.pushNamed(context, '/login');
+            },),
           ],
         ),
       ),
