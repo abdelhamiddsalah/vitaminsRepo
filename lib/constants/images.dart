@@ -2,6 +2,12 @@
 class Assets {
   Assets._();
   
+  /// Assets for imagesImageinauth
+  /// assets/images/imageinauth.svg
+  static const String imagesImageinauth = "assets/images/imageinauth.svg";
 
+  /// Assets for imagesSplashscreen
+  /// assets/images/splashscreen.png
+  static const String imagesSplashscreen = "assets/images/splashscreen.png";
 }
 
