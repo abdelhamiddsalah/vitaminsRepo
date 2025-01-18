@@ -1,121 +1,115 @@
 import 'package:dio/dio.dart';
-import 'package:vitamins/core/databases/api/api_consumer.dart';
-import 'package:vitamins/core/databases/api/endpoints.dart';
 
-class DioConsumer extends ApiConsumer {
-  final Dio _dio;
+import 'interceptors.dart';
 
-  DioConsumer(this._dio) {
-    _dio.options = BaseOptions(
-      baseUrl: Endpoints.baseUrl, // عدلها حسب عنوان الـ API الخاص بك
-      connectTimeout: Duration(milliseconds: 5000),
-      receiveTimeout: Duration(milliseconds: 3000),
+class DioClient {
+  
+  late final Dio _dio;
+  DioClient(): _dio = Dio(
+    BaseOptions(
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-    );
-  }
+      responseType: ResponseType.json,
+      sendTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10)
+    ),
+  )..interceptors.addAll([LoggerInterceptor()]);
 
-  @override
-  Future<dynamic> get({
-    String? path,
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-  }) async {
+  // GET METHOD
+  Future < Response > get(
+    String url, {
+      Map < String,
+      dynamic > ? queryParameters,
+      Options ? options,
+      CancelToken ? cancelToken,
+      ProgressCallback ? onReceiveProgress,
+    }) async {
     try {
-      final response = await _dio.get(
-        path!,
+      final Response response = await _dio.get(
+        url,
         queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress,
       );
-      return response.data;
-    } catch (e) {
-      _handleDioError(e);
+      return response;
+    }
+    on DioException {
+      rethrow;
     }
   }
 
-  @override
-  Future<dynamic> post({
-    String? path,
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    bool isFormData = false,
-  }) async {
+  // POST METHOD
+  Future < Response > post(
+    String url, {
+      data,
+      Map < String,dynamic > ? queryParameters,
+      Options ? options,
+      ProgressCallback ? onSendProgress,
+      ProgressCallback ? onReceiveProgress,
+    }) async {
     try {
-      final response = await _dio.post(
-        path!,
-        data: isFormData ? FormData.fromMap(data as Map<String, dynamic>) : data,
-        queryParameters: queryParameters,
+      final Response response = await _dio.post(
+        url,
+        data: data,
+        options: options,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
       );
-      return response.data;
+      return response;
     } catch (e) {
-      _handleDioError(e);
+      rethrow;
     }
   }
 
-  @override
-  Future<dynamic> put({
-    String? path,
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    bool isFormData = false,
-  }) async {
+  // PUT METHOD
+  Future < Response > put(
+    String url, {
+      dynamic data,
+      Map < String,
+      dynamic > ? queryParameters,
+      Options ? options,
+      CancelToken ? cancelToken,
+      ProgressCallback ? onSendProgress,
+      ProgressCallback ? onReceiveProgress,
+    }) async {
     try {
-      final response = await _dio.put(
-        path!,
-        data: isFormData ? FormData.fromMap(data as Map<String, dynamic>) : data,
-        queryParameters: queryParameters,
-      );
-      return response.data;
-    } catch (e) {
-      _handleDioError(e);
-    }
-  }
-
-  @override
-  Future<dynamic> delete({
-    String? path,
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    bool isFormData = false,
-  }) async {
-    try {
-      final response = await _dio.delete(
-        path!,
+      final Response response = await _dio.put(
+        url,
         data: data,
         queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
       );
-      return response.data;
+      return response;
     } catch (e) {
-      _handleDioError(e);
+      rethrow;
     }
   }
 
-  void _handleDioError(dynamic error) {
-    if (error is DioException) {
-      switch (error.type) {
-        case DioExceptionType.connectionTimeout:
-        case DioExceptionType.receiveTimeout:
-          throw Exception('Connection Timeout');
-        case DioExceptionType.badResponse:
-          throw Exception(
-              'Received invalid status code: ${error.response?.statusCode}');
-        case DioExceptionType.cancel:
-          throw Exception('Request to API server was cancelled');
-        case DioExceptionType.unknown:
-          throw Exception('Connection to API server failed');
-        case DioExceptionType.sendTimeout:
-          // TODO: Handle this case.
-          throw UnimplementedError();
-        case DioExceptionType.badCertificate:
-          // TODO: Handle this case.
-          throw UnimplementedError();
-        case DioExceptionType.connectionError:
-          // TODO: Handle this case.
-          throw UnimplementedError();
-      }
-    } else {
-      throw Exception('Unexpected error occurred');
+  // DELETE METHOD
+  Future < dynamic > delete(
+    String url, {
+      data,
+      Map < String,
+      dynamic > ? queryParameters,
+      Options ? options,
+      CancelToken ? cancelToken,
+    }) async {
+    try {
+      final Response response = await _dio.delete(
+        url,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      );
+      return response.data;
+    } catch (e) {
+      rethrow;
     }
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:vitamins/core/di/getit.dart';
 import 'package:vitamins/core/routing/app_routes.dart';
 
 void main() {
+   setup();
   runApp( MyApp());
 }
 

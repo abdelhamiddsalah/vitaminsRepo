@@ -12,6 +12,8 @@ abstract class ApiConsumer {
     bool isFormData = false,
   });
 
+/*************  ✨ Codeium Command ⭐  *************/
+/******  1105bfb5-558c-4203-a1bd-64bc8fa972ae  *******/
   Future<dynamic> put({
      String path,
       Object? data,

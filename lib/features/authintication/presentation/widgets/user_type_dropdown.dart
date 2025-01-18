@@ -10,7 +10,7 @@ class UserTypeDropdown extends StatefulWidget {
 }
 
 class _UserTypeDropdownState extends State<UserTypeDropdown> {
-  String userType = 'User'; // القيمة الافتراضية
+  String userType = 'user'; // القيمة الافتراضية
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,8 @@ class _UserTypeDropdownState extends State<UserTypeDropdown> {
         child: DropdownButton<String>(
           value: userType,
           items: const [
-            DropdownMenuItem(value: 'User', child: Text('User')),
-            DropdownMenuItem(value: 'Admin', child: Text('Admin')),
+            DropdownMenuItem(value: 'user', child: Text('user')),
+            DropdownMenuItem(value: 'admin', child: Text('admin')),
           ],
           onChanged: (value) {
             setState(() {
