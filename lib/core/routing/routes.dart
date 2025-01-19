@@ -4,4 +4,5 @@ class Routes {
   static const String register = '/';
   static const String forgetpassword = '/forgetpassword';
   static const String resetpassword = '/resetpassword';
+  static const String home = '/home';
 }

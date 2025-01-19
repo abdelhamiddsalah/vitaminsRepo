@@ -56,7 +56,7 @@ class LoginViewBody extends StatelessWidget {
                 },
                 builder: (context, state) {
                   return CustomButton(
-                   text: state is LoginLoading ? "Loading..." : "Sign Up",
+                   text: state is LoginLoading ? "Loading..." : "Log In",
                     onTap: state is LoginLoading ? null : cubit.loginUser,
                   );
                 },
@@ -64,7 +64,7 @@ class LoginViewBody extends StatelessWidget {
               const SizedBox(height: 16.0),
               RowInLastauth(
                 text1: "Don't have an account?",
-                text2: "Log In",
+                text2: "Sign Up",
                 onPressed: () {
                   Navigator.pushNamed(context, '/');
                 },

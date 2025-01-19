@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:vitamins/core/di/getit.dart';
 import 'package:vitamins/core/routing/app_routes.dart';
+import 'package:vitamins/core/shared/shared_preferences.dart';
 
-void main() {
-   setup();
-  runApp( MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Prefs.init();
+  setup();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-   final String initialRoute = '/';
+  final String initialRoute = '/';
   final AppRoutes appRoutes = AppRoutes();
-   MyApp({super.key});
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -18,8 +21,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-      fontFamily: 'Overpass',
-      scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'Overpass',
+        scaffoldBackgroundColor: Colors.white,
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: initialRoute,
