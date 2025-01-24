@@ -17,6 +17,14 @@ class SignupCubit extends Cubit<SignupState> {
   final nameController = TextEditingController();
   String selectedUserType = 'user';
 
+  
+  bool isPasswordVisible = false;
+
+  void togglePasswordVisibility() {
+    isPasswordVisible = !isPasswordVisible;
+    emit(SignupInitial());
+  }
+
   Future<void> registerUser() async {
     if (!formKey.currentState!.validate()) return;
     emit(SignupLoading());

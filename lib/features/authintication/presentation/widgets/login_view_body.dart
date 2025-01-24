@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:svg_flutter/svg_flutter.dart';
 import 'package:vitamins/constants/images.dart';
 import 'package:vitamins/core/validations/validation.dart';
 import 'package:vitamins/core/widgets/custom_button.dart';
 import 'package:vitamins/core/widgets/custom_textfield.dart';
+import 'package:vitamins/core/widgets/failure_dialog.dart';
 import 'package:vitamins/features/authintication/presentation/cubits/login/logincubit/login_cubit.dart';
 import 'package:vitamins/features/authintication/presentation/widgets/row_in_lastauth.dart';
 import 'package:vitamins/features/authintication/presentation/widgets/widget_forget_password.dart';
@@ -23,7 +23,7 @@ class LoginViewBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SvgPicture.asset(Assets.imagesImageinauth),
+                  Image.asset(Assets.imagesLogomedical),
               const SizedBox(height: 25.0),
               CustomTextfield(
                 text: 'Email',
@@ -31,33 +31,44 @@ class LoginViewBody extends StatelessWidget {
                 controller: cubit.emailController,
               ),
               const SizedBox(height: 16.0),
-              CustomTextfield(
-                text: 'Password',
-                validator: Validation.validatePassword,
-                obscureText: true,
-                controller: cubit.passwordController,
+              BlocBuilder<LoginCubit, LoginState>(
+                builder: (context, state) {
+                  return CustomTextfield(
+                    text: 'Password',
+                    keyboardType: TextInputType.visiblePassword,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        cubit.togglePasswordVisibility();
+                      },
+                      icon: Icon(
+                        cubit.isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                      ),
+                    ),
+                    validator: Validation.validatePassword,
+                    obscureText: cubit.isPasswordVisible,
+                    controller: cubit.passwordController,
+                  );
+                },
               ),
               const SizedBox(height: 16.0),
               ForgetPasswordInLogin(),
               const SizedBox(height: 20.0),
               BlocConsumer<LoginCubit, LoginState>(
                 listener: (context, state) {
-                  if (state is LoginSuccess) {
-                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Signin Successful!')),
-                    );
-                    Navigator.pushNamed(context, '/');
-                  }
                   if (state is LoginError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message)),
+                    showDialog(
+                      context: context,
+                      builder: (context) =>
+                          FailureDialog(message: state.message),
                     );
                   }
                 },
                 builder: (context, state) {
                   return CustomButton(
-                   text: state is LoginLoading ? "Loading..." : "Log In",
-                    onTap: state is LoginLoading ? null : cubit.loginUser,
+                    text: state is LoginLoading ? "Loading..." : "Log In",
+                    onTap: state is LoginLoading
+                        ? null
+                        : () => cubit.loginUser(context),
                   );
                 },
               ),
@@ -66,7 +77,7 @@ class LoginViewBody extends StatelessWidget {
                 text1: "Don't have an account?",
                 text2: "Sign Up",
                 onPressed: () {
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pushNamed(context, '/home');
                 },
               ),
             ],

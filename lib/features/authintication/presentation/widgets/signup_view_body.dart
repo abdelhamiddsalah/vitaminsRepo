@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:svg_flutter/svg.dart';
 import 'package:vitamins/constants/images.dart';
 import 'package:vitamins/core/validations/validation.dart';
 import 'package:vitamins/core/widgets/custom_button.dart';
 import 'package:vitamins/core/widgets/custom_textfield.dart';
+import 'package:vitamins/core/widgets/failure_dialog.dart';
+import 'package:vitamins/core/widgets/success_dialog.dart';
 import 'package:vitamins/features/authintication/presentation/cubits/signup/signupcubit/signup_cubit.dart';
 import 'package:vitamins/features/authintication/presentation/widgets/row_in_lastauth.dart';
 import 'user_type_dropdown.dart';
@@ -24,7 +25,7 @@ class SignupViewBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SvgPicture.asset(Assets.imagesImageinauth),
+                Image.asset(Assets.imagesLogomedical),
               const SizedBox(height: 25.0),
               CustomTextfield(
                 text: 'Name',
@@ -37,11 +38,24 @@ class SignupViewBody extends StatelessWidget {
                 controller: cubit.emailController,
               ),
               const SizedBox(height: 16.0),
-              CustomTextfield(
-                text: 'Password',
-                obscureText: true,
-                validator: Validation.validatePassword,
-                controller: cubit.passwordController,
+              BlocBuilder<SignupCubit, SignupState>(
+                builder: (context, state) {
+                  return CustomTextfield(
+                    text: 'Password',
+                    keyboardType: TextInputType.visiblePassword,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        cubit.togglePasswordVisibility();
+                      },
+                      icon: Icon(
+                        cubit.isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                      ),
+                    ),
+                    validator: Validation.validatePassword,
+                    obscureText: cubit.isPasswordVisible,
+                    controller: cubit.passwordController,
+                  );
+                },
               ),
               const SizedBox(height: 20.0),
               UserTypeDropdown(
@@ -51,13 +65,17 @@ class SignupViewBody extends StatelessWidget {
               BlocConsumer<SignupCubit, SignupState>(
                 listener: (context, state) {
                   if (state is SignupSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Signup Successful!')),
+                    showDialog(
+                      context: context,
+                      builder: (context) => SuccessDialog(
+                        message: 'SignUp Completed!',
+                        onPressed: () => Navigator.pushNamed(context, '/home'),
+                      ),
                     );
-                    Navigator.pushReplacementNamed(context, '/login');
                   } else if (state is SignupError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message)),
+                    showDialog(
+                      context: context,
+                      builder: (context) => FailureDialog(message: state.message),
                     );
                   }
                 },

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:svg_flutter/svg.dart';
 import 'package:vitamins/constants/images.dart';
 import 'package:vitamins/core/styles/text_styles.dart';
 import 'package:vitamins/core/validations/validation.dart';
 import 'package:vitamins/core/widgets/custom_button.dart';
 import 'package:vitamins/core/widgets/custom_textfield.dart';
+import 'package:vitamins/core/widgets/failure_dialog.dart';
+import 'package:vitamins/core/widgets/success_dialog.dart';
 import 'package:vitamins/features/authintication/presentation/cubits/forgetpassword/forgetpassword/forgetpassword_cubit.dart';
 
 class ForgetPasswordViewBody extends StatelessWidget {
@@ -13,7 +14,8 @@ class ForgetPasswordViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final cubit = context.read<ForgetpasswordCubit>();
+    final cubit = context.read<ForgetpasswordCubit>();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 56.0),
       child: SingleChildScrollView(
@@ -21,7 +23,7 @@ class ForgetPasswordViewBody extends StatelessWidget {
           key: cubit.formKey,
           child: Column(
             children: [
-              SvgPicture.asset(Assets.imagesImageinauth),
+              Image.asset(Assets.imagesLogomedical),
               const SizedBox(height: 25.0),
               CustomTextfield(
                 text: 'Enter your email',
@@ -45,21 +47,32 @@ class ForgetPasswordViewBody extends StatelessWidget {
               BlocConsumer<ForgetpasswordCubit, ForgetpasswordState>(
                 listener: (context, state) {
                   if (state is ForgetpasswordSuccess) {
- ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('check Your email!')),
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return SuccessDialog(
+                          message: 'Check your email',
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
                     );
-                  
                   }
                   if (state is ForgetpasswordError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                      ),
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return FailureDialog(message: state.message);
+                      },
                     );
                   }
                 },
                 builder: (context, state) {
-                  return CustomButton(text: "Send", onTap: cubit.forgetpassword,);
+                  return CustomButton(
+                    text: "Send",
+                    onTap: cubit.forgetpassword,
+                  );
                 },
               ),
             ],

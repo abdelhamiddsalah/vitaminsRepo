@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:vitamins/features/authintication/data/models/forgetpassword_user_params.dart';
@@ -21,20 +20,10 @@ class ForgetpasswordCubit extends Cubit<ForgetpasswordState> {
   );
   final result = await forgetpasswordUsecase.call(param: params);
   
-  result.fold(
-    (failure) {
-      // Check if failure is a DioException and extract the message
-      String errorMessage = '';
-      if (failure is DioException) {
-        errorMessage = failure.message ?? 'An error occurred'; // Or you can extract other relevant information
-      } else {
-        errorMessage = 'Unknown error occurred';
-      }
-      emit(ForgetpasswordError(message: errorMessage));
-    },
-    (data) => emit(ForgetpasswordSuccess()),
-  );
+ result.fold(
+      (failure) => emit(ForgetpasswordError(message: failure)),
+      (success) => emit(ForgetpasswordSuccess()),
+    );
 }
-
   }
 
