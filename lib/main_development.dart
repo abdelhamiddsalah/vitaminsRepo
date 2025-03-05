@@ -1,5 +1,6 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
+import 'package:vitamins/core/databases/cache/cache_helper.dart';
 import 'package:vitamins/core/di/getit.dart';
 import 'package:vitamins/core/routing/app_routes.dart';
 import 'package:vitamins/core/routing/routes.dart';
@@ -7,6 +8,7 @@ import 'package:vitamins/core/shared/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+   await CacheHelper().init();
   await Prefs.init();
   setup();
   runApp(MyApp());

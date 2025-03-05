@@ -1,47 +1,111 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:vitamins/core/errors/error_model.dart';
 
-class CustomException implements Exception {
-  final String message;
-  CustomException(
-    this.message,
-  );
+//!ServerException
+class ServerException implements Exception {
+  final ErrorModel errorModel;
+  ServerException(this.errorModel);
+}
+//!CacheExeption
+class CacheExeption implements Exception {
+  final String errorMessage;
+  CacheExeption({required this.errorMessage});
+}
 
-  CustomException copyWith({
-    String? message,
-  }) {
-    return CustomException(
-      message ?? this.message,
-    );
+class BadCertificateException extends ServerException {
+  BadCertificateException(super.errorModel);
+}
+
+class ConnectionTimeoutException extends ServerException {
+  ConnectionTimeoutException(super.errorModel);
+}
+
+class BadResponseException extends ServerException {
+  BadResponseException(super.errorModel);
+}
+
+class ReceiveTimeoutException extends ServerException {
+  ReceiveTimeoutException(super.errorModel);
+}
+
+class ConnectionErrorException extends ServerException {
+  ConnectionErrorException(super.errorModel);
+}
+
+class SendTimeoutException extends ServerException {
+  SendTimeoutException(super.errorModel);
+}
+
+class UnauthorizedException extends ServerException {
+  UnauthorizedException(super.errorModel);
+}
+
+class ForbiddenException extends ServerException {
+  ForbiddenException(super.errorModel);
+}
+
+class NotFoundException extends ServerException {
+  NotFoundException(super.errorModel);
+}
+
+class CofficientException extends ServerException {
+  CofficientException(super.errorModel);
+}
+
+class CancelException extends ServerException {
+  CancelException(super.errorModel);
+}
+
+class UnknownException extends ServerException {
+  UnknownException(super.errorModel);
+}
+
+handleDioException(DioException e) {
+  switch (e.type) {
+    case DioExceptionType.connectionError:
+      throw ConnectionErrorException(ErrorModel.fromJson(e.response!.data));
+    case DioExceptionType.badCertificate:
+      throw BadCertificateException(ErrorModel.fromJson(e.response!.data));
+    case DioExceptionType.connectionTimeout:
+      throw ConnectionTimeoutException(ErrorModel.fromJson(e.response!.data));
+
+    case DioExceptionType.receiveTimeout:
+      throw ReceiveTimeoutException(ErrorModel.fromJson(e.response!.data));
+
+    case DioExceptionType.sendTimeout:
+      throw SendTimeoutException(ErrorModel.fromJson(e.response!.data));
+
+    case DioExceptionType.badResponse:
+      switch (e.response?.statusCode) {
+        case 400: // Bad request
+
+          throw BadResponseException(ErrorModel.fromJson(e.response!.data));
+
+        case 401: //unauthorized
+          throw UnauthorizedException(ErrorModel.fromJson(e.response!.data));
+
+        case 403: //forbidden
+          throw ForbiddenException(ErrorModel.fromJson(e.response!.data));
+
+        case 404: //not found
+          throw NotFoundException(ErrorModel.fromJson(e.response!.data));
+
+        case 409: //cofficient
+
+          throw CofficientException(ErrorModel.fromJson(e.response!.data));
+
+        case 504: // Bad request
+
+          throw BadResponseException(
+              ErrorModel(statusCode:  504, message: e.response!.data));
+      }
+
+    case DioExceptionType.cancel:
+      throw CancelException(
+          ErrorModel(message: e.toString(), statusCode: 500));
+
+    case DioExceptionType.unknown:
+      throw UnknownException(
+          ErrorModel(message: e.toString(), statusCode: 500));
   }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'message': message,
-    };
-  }
-
-  factory CustomException.fromMap(Map<String, dynamic> map) {
-    return CustomException(
-      map['message'] as String,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory CustomException.fromJson(String source) => CustomException.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() => 'customException(message: $message)';
-
-  @override
-  bool operator ==(covariant CustomException other) {
-    if (identical(this, other)) return true;
-  
-    return 
-      other.message == message;
-  }
-
-  @override
-  int get hashCode => message.hashCode;
 }

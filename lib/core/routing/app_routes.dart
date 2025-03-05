@@ -25,7 +25,7 @@ Route? generateRoute(RouteSettings settings) {
     case Routes.resetpassword:
       return MaterialPageRoute(builder: (context) =>  ResetPasswordView());
     case Routes.productspage:
-      return MaterialPageRoute(builder: (context) => const ProductsView());
+     return MaterialPageRoute(builder: (context) => const ProductsView());
     case Routes.onboarding:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
     default:

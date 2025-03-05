@@ -82,7 +82,7 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
                 visible: currentIndex < 2,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, Routes.register);
+                    Navigator.pushNamed(context, Routes.home);
                   },
                   child: Text(
                     'Skip',

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:vitamins/core/errors/exception.dart';
 
 import 'interceptors.dart';
 
@@ -17,7 +18,7 @@ class DioClient {
   )..interceptors.addAll([LoggerInterceptor()]);
 
   // GET METHOD
-  Future < Response > get(
+  Future<dynamic>  get(
     String url, {
       Map < String,
       dynamic > ? queryParameters,
@@ -26,22 +27,24 @@ class DioClient {
       ProgressCallback ? onReceiveProgress,
     }) async {
     try {
-      final Response response = await _dio.get(
+      final  response = await _dio.get(
         url,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
-      return response;
+      return response.data;
     }
-    on DioException {
-      rethrow;
+    on DioException catch (e) {
+      handleDioException(e);
+      
     }
+   
   }
 
   // POST METHOD
-  Future < Response > post(
+  Future < Response? > post(
     String url, {
       data,
       Map < String,dynamic > ? queryParameters,
@@ -58,13 +61,14 @@ class DioClient {
         onReceiveProgress: onReceiveProgress,
       );
       return response;
-    } catch (e) {
-      rethrow;
+    }on DioException catch (e) {
+      handleDioException(e);
     }
+    return null;
   }
 
   // PUT METHOD
-  Future < Response > put(
+  Future < Response?> put(
     String url, {
       dynamic data,
       Map < String,
@@ -85,9 +89,10 @@ class DioClient {
         onReceiveProgress: onReceiveProgress,
       );
       return response;
-    } catch (e) {
-      rethrow;
+    }on DioException catch (e) {
+      handleDioException(e);
     }
+   return null;
   }
 
   // DELETE METHOD
@@ -108,8 +113,8 @@ class DioClient {
         cancelToken: cancelToken,
       );
       return response.data;
-    } catch (e) {
-      rethrow;
+    }on DioException catch (e) {
+      handleDioException(e);
     }
   }
 }

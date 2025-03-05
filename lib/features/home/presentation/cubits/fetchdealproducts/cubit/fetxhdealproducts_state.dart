@@ -1,18 +1,19 @@
-part of 'fetxhdealproducts_cubit.dart';
+import 'package:flutter/foundation.dart';
+import 'package:vitamins/features/home/domain/entities/product_entity.dart';
 
 @immutable
-sealed class FetxhdealproductsState {}
+sealed class FetchDealProductsState {}
 
-final class FetxhdealproductsInitial extends FetxhdealproductsState {}
+final class FetchDealProductsInitial extends FetchDealProductsState {}
 
-final class FetxhdealproductsLoading extends FetxhdealproductsState {}
+final class FetchDealProductsLoading extends FetchDealProductsState {}
 
-final class FetxhdealproductsLoaded extends FetxhdealproductsState {
+final class FetchDealProductsLoaded extends FetchDealProductsState {
   final List<ProductEntity> products;
-  FetxhdealproductsLoaded(this.products);
+  FetchDealProductsLoaded(this.products);
 }
 
-final class FetxhdealproductsError extends FetxhdealproductsState {
+final class FetchDealProductsError extends FetchDealProductsState {
   final String message;
-  FetxhdealproductsError(this.message);
+  FetchDealProductsError(this.message);
 }

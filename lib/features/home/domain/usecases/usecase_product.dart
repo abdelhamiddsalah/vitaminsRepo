@@ -10,11 +10,11 @@ class UsecaseProduct {
 
   UsecaseProduct(this.productRepositry);
 
-  Future<Either<Failures, List<ProductEntity>>> call({Map<String, dynamic>? queryParams}) async {
+  Future<Either<Failure, List<ProductEntity>>> call({Map<String, dynamic>? queryParams}) async {
     return await productRepositry.getProducts(queryParams: queryParams);
   }
 
-  Future<Either<Failures, List<CategoryEntity>>> callCategories() async {
-    return await productRepositry.getCategories();
+  Future<Either<Failure, List<CategoryEntity>>> getCategory() async {
+    return await productRepositry.getCategory();
   }
 }

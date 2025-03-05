@@ -4,6 +4,6 @@ import 'package:vitamins/features/home/domain/entities/category_entity.dart';
 import 'package:vitamins/features/home/domain/entities/product_entity.dart';
 
 abstract class ProductRepositry {
-  Future<Either<Failures, List<ProductEntity>>> getProducts({Map<String, dynamic>? queryParams});
-  Future<Either<Failures, List<CategoryEntity>>> getCategories();
+  Future<Either<Failure, List<ProductEntity>>> getProducts({Map<String, dynamic>? queryParams});
+  Future<Either<Failure, List<CategoryEntity>>> getCategory();
 }
