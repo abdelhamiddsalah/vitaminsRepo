@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vitamins/constants/images.dart';
+import 'package:vitamins/core/routing/routes.dart';
 import 'package:vitamins/core/styles/text_styles.dart';
 import 'package:vitamins/core/validations/validation.dart';
 import 'package:vitamins/core/widgets/custom_button.dart';
@@ -33,7 +35,7 @@ class ForgetPasswordViewBody extends StatelessWidget {
               const SizedBox(height: 16.0),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/login');
+                GoRouter.of(context).push(Routes.login);
                 },
                 child: Text(
                   'Back to Sign In',
@@ -53,7 +55,7 @@ class ForgetPasswordViewBody extends StatelessWidget {
                         return SuccessDialog(
                           message: 'Check your email',
                           onPressed: () {
-                            Navigator.pop(context);
+                          GoRouter.of(context).pop();
                           },
                         );
                       },

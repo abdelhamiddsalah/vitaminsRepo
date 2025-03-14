@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vitamins/constants/images.dart';
+import 'package:vitamins/core/routing/routes.dart';
 import 'package:vitamins/core/validations/validation.dart';
 import 'package:vitamins/core/widgets/custom_button.dart';
 import 'package:vitamins/core/widgets/custom_textfield.dart';
@@ -69,7 +71,7 @@ class SignupViewBody extends StatelessWidget {
                       context: context,
                       builder: (context) => SuccessDialog(
                         message: 'SignUp Completed!',
-                        onPressed: () => Navigator.pushNamed(context, '/home'),
+                        onPressed: () =>GoRouter.of(context).push(Routes.home),
                       ),
                     );
                   } else if (state is SignupError) {
@@ -91,7 +93,7 @@ class SignupViewBody extends StatelessWidget {
                 text1: "Already have an account?",
                 text2: "Sign In",
                 onPressed: () {
-                  Navigator.pushNamed(context, '/login');
+                  GoRouter.of(context).push(Routes.login);
                 },
               ),
             ],

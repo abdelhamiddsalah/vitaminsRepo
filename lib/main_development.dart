@@ -63,22 +63,19 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  final String initialRoute = '/';
 
-  final AppRoutes appRoutes = AppRoutes();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: navigatorKey,  // تعيين الـ GlobalKey هنا
+    return MaterialApp.router(
+      routerConfig: router,
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Overpass',
         scaffoldBackgroundColor: Colors.white,
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: initialRoute,
-      onGenerateRoute: appRoutes.generateRoute,
+      
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vitamins/core/routing/routes.dart';
 import 'package:vitamins/core/styles/colorss.dart';
 import 'package:vitamins/core/styles/text_styles.dart';
@@ -40,7 +41,7 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.pushNamed(context, Routes.register);
+      GoRouter.of(context).push(Routes.register);
     }
   }
 
@@ -82,7 +83,7 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
                 visible: currentIndex < 2,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, Routes.home);
+                    GoRouter.of(context).push(Routes.home);
                   },
                   child: Text(
                     'Skip',

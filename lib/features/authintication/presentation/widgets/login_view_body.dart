@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vitamins/constants/images.dart';
+import 'package:vitamins/core/routing/routes.dart';
 import 'package:vitamins/core/validations/validation.dart';
 import 'package:vitamins/core/widgets/custom_button.dart';
 import 'package:vitamins/core/widgets/custom_textfield.dart';
@@ -77,7 +79,7 @@ class LoginViewBody extends StatelessWidget {
                 text1: "Don't have an account?",
                 text2: "Sign Up",
                 onPressed: () {
-                  Navigator.pushNamed(context, '/home');
+                  GoRouter.of(context).push(Routes.home);
                 },
               ),
             ],

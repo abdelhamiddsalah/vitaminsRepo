@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:vitamins/core/routing/routes.dart';
 import 'package:vitamins/core/styles/text_styles.dart';
 
 class ForgetPasswordInLogin extends StatelessWidget {
@@ -13,7 +15,7 @@ class ForgetPasswordInLogin extends StatelessWidget {
       alignment: Alignment.centerRight,
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, '/forgetpassword');
+          GoRouter.of(context).push(Routes.forgetpassword);
         },
         child: Text('Forgot Password?',style: TextStyles.rowtext2.copyWith(fontSize: 16),)));
   }

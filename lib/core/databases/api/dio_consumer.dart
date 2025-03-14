@@ -1,120 +1,70 @@
+import 'dart:io';
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:vitamins/core/errors/exception.dart';
+import 'package:dio/io.dart';
+import 'package:vitamins/core/databases/api/api_consumer.dart';
+import 'package:vitamins/core/databases/api/endpoints.dart';
+import 'package:vitamins/core/databases/api/interceptors.dart';
+import 'package:vitamins/core/databases/api/status_codes.dart';
+import 'package:vitamins/core/di/getit.dart' as di;
 
-import 'interceptors.dart';
+class DioConsumer implements ApiConsumer {
+  final Dio dio;
 
-class DioClient {
-  
-  late final Dio _dio;
-  DioClient(): _dio = Dio(
-    BaseOptions(
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      responseType: ResponseType.json,
-      sendTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10)
-    ),
-  )..interceptors.addAll([LoggerInterceptor()]);
+  DioConsumer({required this.dio}) {
+    (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+    dio.options
+      ..baseUrl = Endpoints.baseUrl
+      ..responseType = ResponseType.json
+      ..followRedirects = false
+      ..validateStatus = (status) => status! < StatusCodes.serverError;
 
-  // GET METHOD
-  Future<dynamic>  get(
-    String url, {
-      Map < String,
-      dynamic > ? queryParameters,
-      Options ? options,
-      CancelToken ? cancelToken,
-      ProgressCallback ? onReceiveProgress,
-    }) async {
-    try {
-      final  response = await _dio.get(
-        url,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onReceiveProgress: onReceiveProgress,
-      );
-      return response.data;
-    }
-    on DioException catch (e) {
-      handleDioException(e);
-      
-    }
-   
+    dio.interceptors.add(di.sl<LoggerInterceptor>());
+    dio.interceptors.add(di.sl<LogInterceptor>());
   }
 
-  // POST METHOD
-  Future < Response? > post(
-    String url, {
-      data,
-      Map < String,dynamic > ? queryParameters,
-      Options ? options,
-      ProgressCallback ? onSendProgress,
-      ProgressCallback ? onReceiveProgress,
-    }) async {
+  @override
+  Future<Either<String, Response>> get({String? path, Map<String, dynamic>? queryParameters}) async {
     try {
-      final Response response = await _dio.post(
-        url,
-        data: data,
-        options: options,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      );
-      return response;
-    }on DioException catch (e) {
-      handleDioException(e);
+      final response = await dio.get(path!, queryParameters: queryParameters);
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
     }
-    return null;
   }
 
-  // PUT METHOD
-  Future < Response?> put(
-    String url, {
-      dynamic data,
-      Map < String,
-      dynamic > ? queryParameters,
-      Options ? options,
-      CancelToken ? cancelToken,
-      ProgressCallback ? onSendProgress,
-      ProgressCallback ? onReceiveProgress,
-    }) async {
+  @override
+  Future<Either<String, Response>> post({String? path, Object? data, Map<String, dynamic>? queryParameters, bool isFormData = false}) async {
     try {
-      final Response response = await _dio.put(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      );
-      return response;
-    }on DioException catch (e) {
-      handleDioException(e);
+      final response = await dio.post(path!, data: data, queryParameters: queryParameters);
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
     }
-   return null;
   }
 
-  // DELETE METHOD
-  Future < dynamic > delete(
-    String url, {
-      data,
-      Map < String,
-      dynamic > ? queryParameters,
-      Options ? options,
-      CancelToken ? cancelToken,
-    }) async {
+  @override
+  Future<Either<String, Response>> put({String? path, Object? data, Map<String, dynamic>? queryParameters, bool isFormData = false}) async {
     try {
-      final Response response = await _dio.delete(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-      );
-      return response.data;
-    }on DioException catch (e) {
-      handleDioException(e);
+      final response = await dio.put(path!, data: data, queryParameters: queryParameters);
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, Response>> delete({String? path, Object? data, Map<String, dynamic>? queryParameters, bool isFormData = false}) async {
+    try {
+      final response = await dio.delete(path!, data: data, queryParameters: queryParameters);
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
     }
   }
 }

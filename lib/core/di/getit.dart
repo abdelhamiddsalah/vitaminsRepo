@@ -1,7 +1,9 @@
 import 'package:data_connection_checker_tv/data_connection_checker.dart';
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vitamins/core/connections/network_info.dart';
 import 'package:vitamins/core/databases/api/dio_consumer.dart';
+import 'package:vitamins/core/databases/api/interceptors.dart';
 import 'package:vitamins/core/databases/cache/cache_helper.dart';
 import 'package:vitamins/features/authintication/data/datasources/data_source.dart';
 import 'package:vitamins/features/authintication/data/repositries/repositry_implentation.dart';
@@ -23,9 +25,18 @@ void setup() {
   // ---------------------------
   // Network Dependencies
   // ---------------------------
-  sl.registerLazySingleton<DioClient>(() => DioClient());
+  sl.registerLazySingleton<DioConsumer>(() => DioConsumer(dio: sl()));
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton(() => DataConnectionChecker());
+  sl.registerLazySingleton(()=> LoggerInterceptor());
+  sl.registerLazySingleton(()=> LogInterceptor(
+    request: true,
+    requestBody: true,
+    responseBody: true,
+    requestHeader: true,
+    responseHeader: true,
+    error: true,
+  ));
 
   // ---------------------------
   // Authentication Dependencies
