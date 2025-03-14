@@ -1,7 +1,9 @@
-class ForgetpasswordUserParams {
-  final String email;
+import 'package:vitamins/features/authintication/domain/entities/forgetpassword_entity.dart';
 
-  ForgetpasswordUserParams({required this.email});
+class ForgetpasswordUserParams extends ForgetpasswordEntity{
+  ForgetpasswordUserParams({required super.email});
+
+  
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

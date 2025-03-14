@@ -1,10 +1,7 @@
-class SignupUserParams {
-  final String email;
-  final String password;
-  final String role;
-  final String name;
+import 'package:vitamins/features/authintication/domain/entities/signup_entity.dart';
 
-  SignupUserParams({required this.email, required this.password, required this.role, required this.name});
+class SignupUserParams extends SignupEntity{
+  SignupUserParams({required super.email, required super.password, required super.name, required super.role});
 
   Map<String, dynamic> toMap()  {
    return <String, dynamic>{

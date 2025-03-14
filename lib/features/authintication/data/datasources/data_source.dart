@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:vitamins/core/databases/api/dio_consumer.dart';
 import 'package:vitamins/core/databases/api/endpoints.dart';
 import 'package:vitamins/core/di/getit.dart';
 import 'package:vitamins/core/shared/shared_preferences.dart';

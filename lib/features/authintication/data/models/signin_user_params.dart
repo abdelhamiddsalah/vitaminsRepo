@@ -1,8 +1,9 @@
-class SigninUserParams {
-  final String email;
-  final String password;
+import 'package:vitamins/features/authintication/domain/entities/signin_entity.dart';
 
-  SigninUserParams({required this.email, required this.password});
+class SigninUserParams extends SigninEntity{
+  SigninUserParams({required super.email, required super.password});
+
+  
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
