@@ -45,7 +45,7 @@ void setup() {
   sl.registerLazySingleton<DataSource>(() => AuthServicesImpl());
 
   // Repository
-  sl.registerLazySingleton<AuthRepositry>(() => AuthRepositoryImpl());
+  sl.registerLazySingleton<AuthRepositry>(() => AuthRepositoryImpl( sl()));
 
   // Use Cases
   sl.registerLazySingleton<SignupUsecase>(() => SignupUsecase());

@@ -4,30 +4,40 @@ import 'package:vitamins/features/home/data/models/category_model.dart';
 import 'package:vitamins/features/home/data/models/product_model.dart';
 
 class ProductsRemoteData {
-  final DioClient dioClient;
+  final DioConsumer dioClient;
 
   ProductsRemoteData({required this.dioClient});
 
   Future<List<ProductModel>> getProducts(Map<String, dynamic>? queryParams) async {
     final response = await dioClient.get(
-      Endpoints.fetchisdealproductsendpoint,
+      path:  Endpoints.fetchisdealproductsendpoint,
       queryParameters: queryParams ?? {},
     );
 
-    if (response is List) {
-      return response.map((product) => ProductModel.fromJson(product)).toList();
-    } else {
-      throw Exception('Expected a list of products but got ${response.runtimeType}');
-    }
+    return response.fold(
+      (failure) => throw Exception('Failed to fetch products: $failure'),
+      (data) {
+        if (data.data is List) {
+          return (data.data as List).map((product) => ProductModel.fromJson(product)).toList();
+        } else {
+          throw Exception('Expected a list of products but got ${data.runtimeType}');
+        }
+      },
+    );
   }
 
   Future<List<CategoryModel>> getCategory() async {
-    final response = await dioClient.get(Endpoints.fetchcategoriesendpoint);
+    final response = await dioClient.get(path :Endpoints.fetchcategoriesendpoint);
 
-    if (response is List) {
-      return response.map((category) => CategoryModel.fromJson(category)).toList();
-    } else {
-      throw Exception('Expected a list of categories but got ${response.runtimeType}');
-    }
+    return response.fold(
+      (failure) => throw Exception('Failed to fetch categories: $failure'),
+      (data) {
+        if (data.data is List) {
+          return (data.data as List).map((category) => CategoryModel.fromJson(category)).toList();
+        } else {
+          throw Exception('Expected a list of categories but got ${data.runtimeType}');
+        }
+      },
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:vitamins/core/databases/api/dio_consumer.dart';
 import 'package:vitamins/core/databases/api/endpoints.dart';
 import 'package:vitamins/core/di/getit.dart';
 import 'package:vitamins/core/shared/shared_preferences.dart';
@@ -16,10 +17,12 @@ abstract class DataSource {
 }
 
 class AuthServicesImpl extends DataSource {
+  final DioConsumer dioConsumer = sl<DioConsumer>();
+  AuthServicesImpl();
   @override
   Future<Either> signup(SignupUserParams signupUserParams) async{
    try {
-   var response =await  sl<DioClient>().post(Endpoints.registerendpoint, data: signupUserParams.toMap());
+   var response =await  dioConsumer.post(data: signupUserParams.toMap(), path: Endpoints.registerendpoint);
      return Right(response);
    }on DioException catch(e){
      return Left(e.response!.data['message'].toString());
@@ -29,7 +32,7 @@ class AuthServicesImpl extends DataSource {
   @override
   Future<Either> login(SigninUserParams signinUserParams) async{
     try {
-      var response =await  sl<DioClient>().post(Endpoints.loginendpoint, data: signinUserParams.toMap());
+      var response =await  dioConsumer.post(path :Endpoints.loginendpoint, data: signinUserParams.toMap());
       return Right(response);
     } on DioException catch (e) {
       return Left(e.response!.data['message'].toString());
@@ -39,7 +42,7 @@ class AuthServicesImpl extends DataSource {
   @override
   Future<Either> forgetpassord(ForgetpasswordUserParams forgetpasswordUserParams) async{
     try {
-      var response =await  sl<DioClient>().post(Endpoints.forgetpasswordendpoint, data: forgetpasswordUserParams.toMap());
+      var response =await  dioConsumer.post(path:Endpoints.forgetpasswordendpoint, data: forgetpasswordUserParams.toMap());
       return Right(response);
     } on DioException catch (e) {
       return Left(e.response!.data['message'].toString());
@@ -51,7 +54,7 @@ class AuthServicesImpl extends DataSource {
     try {
       
       var token = Prefs.getString('token2');
-      var response =await  sl<DioClient>().post(Endpoints.resetPasswordEndpoint(token), data: resetpasswordUserParams.toMap());
+      var response =await  dioConsumer.post(path:Endpoints.resetPasswordEndpoint(token), data: resetpasswordUserParams.toMap());
       return Right(response);
     } on DioException catch (e) {
       return Left(e.response!.data['message'].toString());
