@@ -43,29 +43,26 @@ void setup() {
   // ---------------------------
   // Data Sources
   sl.registerLazySingleton<DataSource>(() => AuthServicesImpl());
+    sl.registerLazySingleton<ProductsRemoteData>(() => ProductsRemoteData(dioClient: sl()));
+  sl.registerLazySingleton<ProductsLocalData>(() => ProductsLocalData(cacheHelper: sl()));
 
   // Repository
-  sl.registerLazySingleton<AuthRepositry>(() => AuthRepositoryImpl( sl()));
-
+  sl.registerLazySingleton<AuthRepositry>(() => AuthRepositoryImpl( ));
+  sl.registerLazySingleton<ProductRepositry>(() => ProductRepositryImpl(sl()));
   // Use Cases
   sl.registerLazySingleton<SignupUsecase>(() => SignupUsecase());
   sl.registerLazySingleton<SigninUsecase>(() => SigninUsecase());
   sl.registerLazySingleton<ForgetpasswordUsecase>(() => ForgetpasswordUsecase());
   sl.registerLazySingleton<ResetpasswordUsecase>(() => ResetpasswordUsecase());
-
+   sl.registerLazySingleton<UsecaseProduct>(() => UsecaseProduct(sl()));
   // ---------------------------
   // Home/Products Dependencies
   // ---------------------------
   // Cache Helper
   sl.registerLazySingleton(() => CacheHelper());
 
-  // Data Sources
-  sl.registerLazySingleton<ProductsRemoteData>(() => ProductsRemoteData(dioClient: sl()));
-  sl.registerLazySingleton<ProductsLocalData>(() => ProductsLocalData(cacheHelper: sl()));
+
 
   // Register ProductRepositry interface with its implementation
-  sl.registerLazySingleton<ProductRepositry>(() => ProductRepositryImpl(sl(), sl(), sl()));
 
-  // Use Cases
-  sl.registerLazySingleton<UsecaseProduct>(() => UsecaseProduct(sl()));
 }

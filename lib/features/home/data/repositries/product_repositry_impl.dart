@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:vitamins/core/connections/network_info.dart';
+import 'package:vitamins/core/di/getit.dart';
 import 'package:vitamins/core/errors/exception.dart';
 import 'package:vitamins/core/errors/failures.dart';
 import 'package:vitamins/features/home/data/datasources/products_local_data.dart';
@@ -11,10 +12,10 @@ import 'package:vitamins/features/home/domain/repositries/product_repositry.dart
 
 class ProductRepositryImpl implements ProductRepositry {
   final NetworkInfo networkInfo;
-  final ProductsRemoteData productsRemoteData;
-  final ProductsLocalData productsLocalData;
+  final ProductsRemoteData  productsRemoteData = sl<ProductsRemoteData>();
+  final ProductsLocalData  productsLocalData = sl<ProductsLocalData>();
 
-  ProductRepositryImpl(this.networkInfo, this.productsRemoteData, this.productsLocalData);
+  ProductRepositryImpl(this.networkInfo);
 
   @override
   Future<Either<Failure, List<ProductEntity>>> getProducts({Map<String, dynamic>? queryParams}) async {

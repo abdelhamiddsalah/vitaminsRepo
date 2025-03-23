@@ -17,7 +17,7 @@ abstract class DataSource {
 }
 
 class AuthServicesImpl extends DataSource {
-  final DioConsumer dioConsumer = sl<DioConsumer>();
+  final  dioConsumer = sl<DioConsumer>();
   AuthServicesImpl();
   @override
   Future<Either> signup(SignupUserParams signupUserParams) async{

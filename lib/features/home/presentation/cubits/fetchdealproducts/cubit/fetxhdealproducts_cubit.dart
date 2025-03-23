@@ -5,7 +5,7 @@ import 'package:vitamins/features/home/presentation/cubits/fetchdealproducts/cub
 
 
 class FetchDealProductsCubit extends Cubit<FetchDealProductsState> {
-  final UsecaseProduct usecaseProduct = sl<UsecaseProduct>();
+  final  usecaseProduct = sl<UsecaseProduct>();
 
   FetchDealProductsCubit() : super(FetchDealProductsInitial());
 

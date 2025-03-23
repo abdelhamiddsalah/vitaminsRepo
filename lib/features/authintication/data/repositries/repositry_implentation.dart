@@ -11,8 +11,8 @@ import 'package:vitamins/features/authintication/domain/repositriess/auth_reposi
 
 class AuthRepositoryImpl implements AuthRepositry {
 
- final DataSource dataSource;
- AuthRepositoryImpl(this.dataSource);
+ final  dataSource = sl<DataSource>();
+ AuthRepositoryImpl();
   @override
   Future<Either> signup(SignupUserParams signupUserParams) async {
    return dataSource.signup(signupUserParams);
