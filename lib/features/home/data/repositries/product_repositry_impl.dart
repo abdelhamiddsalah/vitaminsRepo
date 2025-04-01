@@ -11,11 +11,11 @@ import 'package:vitamins/features/home/domain/entities/product_entity.dart';
 import 'package:vitamins/features/home/domain/repositries/product_repositry.dart';
 
 class ProductRepositryImpl implements ProductRepositry {
-  final NetworkInfo networkInfo;
+  final NetworkInfo networkInfo = sl<NetworkInfo>();
   final ProductsRemoteData  productsRemoteData = sl<ProductsRemoteData>();
   final ProductsLocalData  productsLocalData = sl<ProductsLocalData>();
 
-  ProductRepositryImpl(this.networkInfo);
+  ProductRepositryImpl();
 
   @override
   Future<Either<Failure, List<ProductEntity>>> getProducts({Map<String, dynamic>? queryParams}) async {

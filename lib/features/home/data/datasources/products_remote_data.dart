@@ -1,12 +1,13 @@
 import 'package:vitamins/core/databases/api/dio_consumer.dart';
 import 'package:vitamins/core/databases/api/endpoints.dart';
+import 'package:vitamins/core/di/getit.dart';
 import 'package:vitamins/features/home/data/models/category_model.dart';
 import 'package:vitamins/features/home/data/models/product_model.dart';
 
 class ProductsRemoteData {
-  final DioConsumer dioClient;
+  final DioConsumer dioClient= sl<DioConsumer>();
 
-  ProductsRemoteData({required this.dioClient});
+  ProductsRemoteData();
 
   Future<List<ProductModel>> getProducts(Map<String, dynamic>? queryParams) async {
     final response = await dioClient.get(

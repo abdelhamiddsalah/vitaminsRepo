@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:vitamins/core/databases/cache/cache_helper.dart';
+import 'package:vitamins/core/di/getit.dart';
 import 'package:vitamins/core/errors/exception.dart';
 import 'package:vitamins/features/home/data/models/category_model.dart';
 import 'package:vitamins/features/home/data/models/product_model.dart';
 
 class ProductsLocalData {
-  final CacheHelper cacheHelper;
+  final CacheHelper cacheHelper = sl<CacheHelper>();
 
-  ProductsLocalData({required this.cacheHelper});
 
   // Cache a list of products
   Future<void> cacheproducts(List<ProductModel> products) async {

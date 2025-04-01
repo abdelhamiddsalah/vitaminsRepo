@@ -25,7 +25,7 @@ class DioConsumer implements ApiConsumer {
       ..validateStatus = (status) => status! < StatusCodes.serverError;
 
     dio.interceptors.add(di.sl<LoggerInterceptor>());
-    dio.interceptors.add(di.sl<LogInterceptor>());
+    //dio.interceptors.add(di.sl<LogInterceptor>());
   }
 
   @override

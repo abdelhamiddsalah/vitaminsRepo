@@ -21,7 +21,7 @@ import 'package:vitamins/features/home/domain/usecases/usecase_product.dart';
 // تعريف GetIt لتخزين التسجيلات
 final sl = GetIt.instance;
 
-void setup() {
+/*void setup() {
   // ---------------------------
   // Network Dependencies
   // ---------------------------
@@ -43,18 +43,18 @@ void setup() {
   // ---------------------------
   // Data Sources
   sl.registerLazySingleton<DataSource>(() => AuthServicesImpl());
-    sl.registerLazySingleton<ProductsRemoteData>(() => ProductsRemoteData(dioClient: sl()));
-  sl.registerLazySingleton<ProductsLocalData>(() => ProductsLocalData(cacheHelper: sl()));
+    sl.registerLazySingleton<ProductsRemoteData>(() => ProductsRemoteData());
+  sl.registerLazySingleton<ProductsLocalData>(() => ProductsLocalData());
 
   // Repository
   sl.registerLazySingleton<AuthRepositry>(() => AuthRepositoryImpl( ));
-  sl.registerLazySingleton<ProductRepositry>(() => ProductRepositryImpl(sl()));
+  sl.registerLazySingleton<ProductRepositry>(() => ProductRepositryImpl());
   // Use Cases
   sl.registerLazySingleton<SignupUsecase>(() => SignupUsecase());
   sl.registerLazySingleton<SigninUsecase>(() => SigninUsecase());
   sl.registerLazySingleton<ForgetpasswordUsecase>(() => ForgetpasswordUsecase());
   sl.registerLazySingleton<ResetpasswordUsecase>(() => ResetpasswordUsecase());
-   sl.registerLazySingleton<UsecaseProduct>(() => UsecaseProduct(sl()));
+   sl.registerLazySingleton<UsecaseProduct>(() => UsecaseProduct());
   // ---------------------------
   // Home/Products Dependencies
   // ---------------------------
@@ -65,4 +65,47 @@ void setup() {
 
   // Register ProductRepositry interface with its implementation
 
+}*/
+
+void setup() {
+  // ---------------------------
+  // Network Dependencies
+  // ---------------------------
+
+  // ✅ تسجيل LoggerInterceptor
+  sl.registerLazySingleton<LoggerInterceptor>(() => LoggerInterceptor());
+
+  // ✅ تسجيل Dio مع LoggerInterceptor
+  sl.registerLazySingleton<Dio>(() {
+    final dio = Dio();
+    dio.interceptors.add(sl<LoggerInterceptor>()); // استخدام LoggerInterceptor بدلاً من LogInterceptor
+    return dio;
+  });
+
+  sl.registerLazySingleton<DioConsumer>(() => DioConsumer(dio: sl()));
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+  sl.registerLazySingleton(() => DataConnectionChecker());
+
+  // ---------------------------
+  // Authentication Dependencies
+  // ---------------------------
+  sl.registerLazySingleton<DataSource>(() => AuthServicesImpl());
+  sl.registerLazySingleton<ProductsRemoteData>(() => ProductsRemoteData());
+  sl.registerLazySingleton<ProductsLocalData>(() => ProductsLocalData());
+
+  // Repository
+  sl.registerLazySingleton<AuthRepositry>(() => AuthRepositoryImpl());
+  sl.registerLazySingleton<ProductRepositry>(() => ProductRepositryImpl());
+
+  // Use Cases
+  sl.registerLazySingleton<SignupUsecase>(() => SignupUsecase());
+  sl.registerLazySingleton<SigninUsecase>(() => SigninUsecase());
+  sl.registerLazySingleton<ForgetpasswordUsecase>(() => ForgetpasswordUsecase());
+  sl.registerLazySingleton<ResetpasswordUsecase>(() => ResetpasswordUsecase());
+  sl.registerLazySingleton<UsecaseProduct>(() => UsecaseProduct());
+
+  // ---------------------------
+  // Home/Products Dependencies
+  // ---------------------------
+  sl.registerLazySingleton(() => CacheHelper());
 }
